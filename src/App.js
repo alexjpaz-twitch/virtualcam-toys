@@ -1,24 +1,33 @@
+import React, { useEffect } from "react";
 import logo from './logo.svg';
 import './App.css';
 
+import Routes from './Routes';
+import { MediaStreamContext } from './MediaStreamContext';
+
+function InteractionGuard({ children }) {
+  const [ ready, setReady ] = React.useState(true);
+
+  if(ready) {
+    return children;
+  }
+
+  const onClick = (e) => {
+    e.stopPropagation();
+
+    setReady(true);
+  };
+
+  return <h1 onClick={onClick}>click me</h1>
+}
+
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <InteractionGuard>
+    <MediaStreamContext.DefaultProvider>
+      <Routes></Routes>
+    </MediaStreamContext.DefaultProvider>
+    </InteractionGuard>
   );
 }
 
